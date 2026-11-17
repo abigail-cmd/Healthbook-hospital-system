@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{% block title %}Hospital Booking{% endblock %}</title>
+
+    <!-- Google Font: Plus Jakarta Sans & Inter -->
+        <!-- Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+
+    <!-- Bootstrap 5.3.3 & Custom CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}"
+    />
+
+    <style>
+      :root {
+        --hb-navy: #0a2540;
+        --hb-blue: #0d6efd;
+        --hb-teal: #00a896;
+        --hb-soft-bg: #f4f8fc;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background-color: #f8fafc;
+        color: #1e293b;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      main {
+        flex: 1 0 auto;
+      }
+
+      /* Modern Sticky Navbar */
+      .hb-navbar {
+        background-color: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
+        box-shadow: 0 2px 12px rgba(10, 37, 64, 0.04);
+      }
+      .hb-brand {
+        font-weight: 800;
+        font-size: 1.4rem;
+        color: var(--hb-navy) !important;
+        letter-spacing: -0.02em;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .hb-brand-icon {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, var(--hb-blue), var(--hb-teal));
+        color: #ffffff;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1.1rem;
+      }
+      .hb-nav-link {
+        color: #475569 !important;
+        font-weight: 500;
+        padding: 0.5rem 0.9rem !important;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+      }
+      .hb-nav-link:hover {
+        color: var(--hb-blue) !important;
+        background-color: #f1f5f9;
+      }
+
+      /* Shared Home & Page Styles */
+      .hb-hero {
+        background: radial-gradient(
+          circle at top right,
+          #dbeafe 0%,
+          #f0f7ff 55%,
+          #ffffff 100%
+        );
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .hb-about-img {
+        border-radius: 20px;
+        border: 4px solid #ffffff;
+        box-shadow: 0 18px 36px rgba(10, 37, 64, 0.12);
+      }
+      .hb-dept-card {
+        border: 1px solid #e6eef8;
+        border-radius: 18px;
+        background: #ffffff;
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
+      }
+      .hb-dept-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--hb-blue), var(--hb-teal));
+        transform: scaleX(0);
+        transition: transform 0.25s ease;
+      }
+      .hb-dept-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 14px 28px rgba(10, 37, 64, 0.1) !important;
+      }
+      .hb-dept-card:hover::after {
+        transform: scaleX(1);
+      }
+      .hb-avatar {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border: 4px solid #e8f1ff;
+        padding: 3px;
+        background: #ffffff;
+      }
+      .hb-emergency {
+        background: linear-gradient(
+          120deg,
+          #991b1b 0%,
+          #dc2626 55%,
+          #b91c1c 100%
+        );
+      }
+      .hb-quote-card {
+        max-width: 720px;
+        border-radius: 18px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+      }
+      .hb-footer {
+        background-color: var(--hb-navy);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+ <nav class="navbar navbar-expand-lg hb-navbar sticky-top py-2">
+  <div class="container">
+    <a class="navbar-brand hb-brand" href="{{ url_for('index') }}">
+      <span class="hb-brand-icon">+</span>
+      <span>Health<span class="text-primary">Book</span></span>
+    </a>
+
+    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1 mt-3 mt-lg-0">
+        <li class="nav-item">
+          <a class="nav-link hb-nav-link" href="{{ url_for('index') }}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link hb-nav-link" href="{{ url_for('doctors') }}">Doctors</a>
+        </li>
+
+              {% if user %}
+          {% if user.role == 'admin' %}
+            <li class="nav-item">
+              <a class="nav-link hb-nav-link" href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+            </li>
+            <li class="nav-item ms-lg-2">
+              <span class="badge bg-dark text-white rounded-pill px-3 py-2">
+                Admin: {{ user.full_name if user.full_name else user.username }}
+              </span>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link hb-nav-link" href="{{ url_for('my_appointments') }}">My Appointments</a>
+            </li>
+            <li class="nav-item ms-lg-2">
+              <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 fw-semibold">
+                Patient: {{ user.full_name if user.full_name else user.username }}
+              </span>
+            </li>
+          {% endif %}
+          <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+            <a class="btn btn-outline-danger btn-sm px-3 py-2 rounded-pill fw-semibold" href="{{ url_for('logout') }}">Logout</a>
+          </li>
+        {% else %}
+
+          <li class="nav-item ms-lg-2">
+            <a class="nav-link hb-nav-link fw-semibold text-primary" href="{{ url_for('login') }}">Patient / Admin Login</a>
+          </li>
+          <li class="nav-item ms-lg-1 mt-2 mt-lg-0">
+            <a class="btn btn-primary btn-sm px-4 py-2 rounded-pill fw-semibold shadow-sm" href="{{ url_for('register') }}">Register</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <div class="container pt-3">
+      {% for cat, msg in messages %}
+      <div
+        class="alert alert-{{ cat }} alert-dismissible fade show rounded-3 shadow-sm border-0"
+        role="alert"
+      >
+        {{ msg }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
+
+    <!-- Main Page Content -->
+    <main>{% block content %}{% endblock %}</main>
+
+        <!-- Compact Professional Footer -->
+    <footer class="hb-footer text-white pt-4 pb-3 mt-auto">
+      <div class="container">
+        <div class="row gy-3 align-items-start justify-content-between small">
+          
+          <!-- Brand & Summary -->
+          <div class="col-lg-4">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <span class="hb-brand-icon" style="width: 26px; height: 26px; font-size: 0.95rem;">+</span>
+              <span class="fw-bold fs-6 text-white">Health<span class="text-info">Book</span> Hospital</span>
+            </div>
+            <p class="text-white-50 mb-1">
+              Ikorodu, Lagos State, Nigeria
+            </p>
+            <p class="text-white-50 mb-0">
+              Outpatient Clinics: Mon – Sat, 8:00 AM – 6:00 PM &bull; Emergency: 24/7
+            </p>
+          </div>
+
+          <!-- Quick Navigation -->
+          <div class="col-6 col-lg-3">
+            <h6 class="text-uppercase fw-bold text-white-50 mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em;">
+              Quick Links
+            </h6>
+            <ul class="list-unstyled mb-0 d-flex flex-column gap-1">
+              <li><a href="{{ url_for('index') }}" class="text-white-50 text-decoration-none">Home</a></li>
+              <li><a href="{{ url_for('doctors') }}" class="text-white-50 text-decoration-none">Find a Specialist</a></li>
+              {% if user %}
+                {% if user.role == 'admin' %}
+                  <li><a href="{{ url_for('admin_dashboard') }}" class="text-white-50 text-decoration-none">Admin Dashboard</a></li>
+                {% else %}
+                  <li><a href="{{ url_for('my_appointments') }}" class="text-white-50 text-decoration-none">My Appointments</a></li>
+                {% endif %}
+              {% else %}
+                <li><a href="{{ url_for('login') }}" class="text-white-50 text-decoration-none">Patient / Admin Login</a></li>
+              {% endif %}
+            </ul>
+          </div>
+
+          <!-- Contact & Emergency -->
+          <div class="col-6 col-lg-4">
+            <h6 class="text-uppercase fw-bold text-white-50 mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em;">
+              Contact &amp; Emergency
+            </h6>
+            <ul class="list-unstyled text-white-50 mb-0 d-flex flex-column gap-1">
+              <li>Email: <a href="mailto:info@healthbook.com" class="text-white text-decoration-none">info@healthbook.com</a></li>
+              <li>General Line: <a href="tel:+2348004325842" class="text-white text-decoration-none">+234-800-HEALTHBOOK</a></li>
+              <li><span class="badge bg-danger bg-opacity-75 text-white mt-1">24/7 Emergency Dispatch Available</span></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <hr class="border-secondary opacity-25 my-3" />
+
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center text-white-50" style="font-size: 0.8rem;">
+          <span>&copy; 2026 HealthBook Hospital. All rights reserved.</span>
+          <span class="mt-1 mt-sm-0">Patient Portal &amp; Appointment System</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://jsdelivr.net"></script>
+  </body>
+</html>

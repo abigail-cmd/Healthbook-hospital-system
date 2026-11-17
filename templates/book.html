@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Book Appointment with Dr. {{ doctor.name }} - HealthBook{% endblock %}
+
+{% block content %}
+<style>
+  .hb-booking-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    background: #ffffff;
+    overflow: hidden;
+  }
+  .hb-booking-header {
+    background: linear-gradient(135deg, #f0f7ff 0%, #e0efff 100%);
+    border-bottom: 1px solid #d6e6ff;
+  }
+  .hb-doc-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #0d6efd, #00a896);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .hb-input {
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    padding: 0.65rem 0.9rem;
+  }
+  .hb-input:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+  }
+</style>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+
+      <!-- Back Navigation -->
+      <div class="mb-3">
+        <a href="{{ url_for('doctors') }}" class="text-decoration-none text-secondary small fw-semibold">
+          &larr; Back to All Doctors
+        </a>
+      </div>
+
+      <!-- Main Booking Card -->
+      <div class="card hb-booking-card shadow-sm">
+        
+        <!-- Doctor Summary Header -->
+        <div class="hb-booking-header p-4 p-md-5">
+          <div class="d-flex align-items-start gap-3">
+            <div class="hb-doc-avatar shadow-sm">
+              {{ doctor.name[:2] | upper }}
+            </div>
+            <div>
+              <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-1 mb-2 fw-semibold">
+                {{ doctor.department }}
+              </span>
+              <h4 class="fw-bold text-dark mb-1">Book with Dr. {{ doctor.name }}</h4>
+              <p class="text-secondary small mb-0 lh-base">
+                {{ doctor.bio }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Appointment Form -->
+        <div class="card-body p-4 p-md-5">
+          <form method="post">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-dark small">Preferred Date</label>
+                <input class="form-control hb-input" type="date" name="date" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-dark small">Preferred Time</label>
+                <input class="form-control hb-input" type="time" name="time" required>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <label class="form-label fw-semibold text-dark small">Reason for Visit</label>
+              <textarea
+                class="form-control hb-input"
+                name="reason"
+                rows="3"
+                placeholder="Briefly describe your symptoms or the purpose of your consultation..."
+              ></textarea>
+            </div>
+
+            <!-- Clinic Info Note -->
+            <div class="alert alert-light border rounded-3 mt-4 mb-4 py-2 px-3 small text-muted">
+              Outpatient consultation hours are <strong>Mon – Sat, 8:00 AM – 6:00 PM</strong>. Please arrive 15 minutes early for check-in.
+            </div>
+
+            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
+              <button type="submit" class="btn btn-primary btn-lg px-5 py-2 rounded-pill fw-semibold shadow-sm">
+                Request Appointment
+              </button>
+              <a href="{{ url_for('doctors') }}" class="btn btn-link text-muted text-decoration-none small">
+                Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+body{
+  background: #f7fbff;
+}
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.card { border-radius: 10px; }
+.list-group-item { border: none; border-radius: 6px; margin-bottom: 8px; }

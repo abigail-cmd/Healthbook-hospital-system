@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Log In - HealthBook{% endblock %}
+
+{% block content %}
+<style>
+  .hb-auth-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    background: #ffffff;
+    overflow: hidden;
+  }
+  .hb-auth-top {
+    background: linear-gradient(135deg, #f0f7ff 0%, #e0efff 100%);
+    border-bottom: 1px solid #d6e6ff;
+  }
+  .hb-auth-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #0d6efd, #00a896);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hb-input {
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    padding: 0.65rem 0.9rem;
+  }
+  .hb-input:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+  }
+</style>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+
+      <!-- Back Navigation -->
+      <div class="mb-3">
+        <a href="{{ url_for('index') }}" class="text-decoration-none text-secondary small fw-semibold">
+          &larr; Back to Home
+        </a>
+      </div>
+
+      <!-- Login Card -->
+      <div class="card hb-auth-card shadow-sm">
+        
+        <!-- Portal Header -->
+        <div class="hb-auth-top p-4 text-center">
+          <div class="hb-auth-icon mx-auto mb-3 shadow-sm">+</div>
+          <h3 class="fw-bold text-dark mb-1">Welcome Back</h3>
+          <p class="text-secondary small mb-0">
+            Patient &amp; Admin Portal &mdash; Sign in with your username and password to access your dashboard.
+          </p>
+        </div>
+
+        <!-- Login Form -->
+        <div class="card-body p-4 p-md-5">
+          <form method="post">
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-dark small">Username</label>
+              <input
+                class="form-control hb-input"
+                name="username"
+                placeholder="Enter your username"
+                required
+              >
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-semibold text-dark small">Password</label>
+              <input
+                type="password"
+                class="form-control hb-input"
+                name="password"
+                placeholder="Enter your password"
+                required
+              >
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill fw-semibold shadow-sm">
+              Login
+            </button>
+          </form>
+
+          <!-- Role Clarification & Register Link -->
+          <div class="alert alert-light border rounded-3 mt-4 mb-3 py-2 px-3 small text-muted text-center">
+            Admins will be directed to the <strong>Admin Dashboard</strong> automatically after signing in.
+          </div>
+
+          <p class="text-center text-muted small mb-0">
+            Don't have an account yet?
+            <a href="{{ url_for('register') }}" class="text-primary fw-semibold text-decoration-none">
+              Register as a Patient
+            </a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

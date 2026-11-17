@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}Manage Doctors - HealthBook{% endblock %}
+
+{% block content %}
+<style>
+  .hb-panel-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    background: #ffffff;
+    overflow: hidden;
+  }
+  .hb-panel-header {
+    background: linear-gradient(135deg, #f0f7ff 0%, #e0efff 100%);
+    border-bottom: 1px solid #d6e6ff;
+  }
+  .hb-input {
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    padding: 0.65rem 0.9rem;
+  }
+  .hb-input:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+  }
+  .hb-doc-item {
+    border-left: none;
+    border-right: none;
+    border-color: #f1f5f9;
+    padding: 1rem 1.25rem;
+    transition: background-color 0.2s ease;
+  }
+  .hb-doc-item:hover {
+    background-color: #f8fafc;
+  }
+  .hb-mini-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #e8f1ff;
+    color: #0d6efd;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+</style>
+
+<div class="container py-5">
+  <!-- Top Back Links -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <a href="{{ url_for('admin_dashboard') }}" class="text-decoration-none text-secondary small fw-semibold">
+      &larr; Back to Admin Dashboard
+    </a>
+    <a href="{{ url_for('doctors') }}" class="text-decoration-none text-primary small fw-semibold">
+      View Public Doctors Page &rarr;
+    </a>
+  </div>
+
+  <!-- Page Header -->
+  <div class="pb-4 mb-4 border-bottom">
+    <span class="text-primary text-uppercase fw-bold small">Hospital Administration</span>
+    <h2 class="fw-bold text-dark mt-1 mb-1">Manage Doctors</h2>
+    <p class="text-muted mb-0">
+      Add new medical consultants to the directory or update existing clinic staff.
+    </p>
+  </div>
+
+  <div class="row g-4 align-items-start">
+    
+    <!-- Left Column: Add Doctor Form -->
+    <div class="col-lg-5">
+      <div class="card hb-panel-card shadow-sm">
+        <div class="hb-panel-header p-4">
+          <h5 class="fw-bold text-dark mb-1">Add New Doctor</h5>
+          <p class="text-secondary small mb-0">Fill in the specialist's credentials and clinic availability.</p>
+        </div>
+
+        <div class="card-body p-4">
+          <form method="post">
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-dark small">Doctor Name</label>
+              <input
+                class="form-control hb-input"
+                name="name"
+                placeholder="e.g. Adebayo Ogunlesi"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-dark small">Department</label>
+              <input
+                class="form-control hb-input"
+                name="department"
+                placeholder="e.g. Cardiology"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-dark small">Biography &amp; Specialty</label>
+              <textarea
+                class="form-control hb-input"
+                name="bio"
+                rows="3"
+                placeholder="Consultant specializing in preventive care and diagnostics..."
+              ></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-semibold text-dark small">Available Days (comma separated)</label>
+              <input
+                class="form-control hb-input"
+                name="available_days"
+                placeholder="Mon,Tue,Wed"
+              >
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill fw-semibold shadow-sm">
+              + Add Doctor
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Existing Doctors List -->
+    <div class="col-lg-7">
+      <div class="card hb-panel-card shadow-sm">
+        <div class="card-header bg-white py-3 px-4 border-bottom d-flex justify-content-between align-items-center">
+          <h5 class="fw-bold text-dark mb-0">Existing Doctors</h5>
+          <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-1 fw-semibold">
+            {{ doctors | length }} Total
+          </span>
+        </div>
+
+        <ul class="list-group list-group-flush">
+          {% for d in doctors %}
+            <li class="list-group-item hb-doc-item d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+              <div class="d-flex align-items-start gap-3">
+                <div class="hb-mini-avatar">
+                  {{ d.name[:2] | upper }}
+                </div>
+                <div>
+                  <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                    <strong class="text-dark">Dr. {{ d.name }}</strong>
+                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-2 py-1 small">
+                      {{ d.department }}
+                    </span>
+                  </div>
+                  <small class="text-muted d-block">
+                    Available: {{ d.available_days if d.available_days else 'Not specified' }}
+                  </small>
+                </div>
+              </div>
+
+              <div class="text-end">
+                <a
+                  href="{{ url_for('delete_doctor', id=d.id) }}"
+                  class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-semibold"
+                  onclick="return confirm('Remove Dr. {{ d.name }} from the directory?');"
+                >
+                  Delete
+                </a>
+              </div>
+            </li>
+          {% else %}
+            <li class="list-group-item text-center py-5 text-muted border-0">
+              <div class="fw-semibold text-dark mb-1">No doctors yet</div>
+              <small>Use the form on the left to add your first specialist.</small>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

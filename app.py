@@ -16,7 +16,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "hospital.db")
 
 app = Flask(__name__)
-app.secret_key = "replace_this_with_a_strong_secret"  # change for production
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")  # change for production
 
 # === DB UTIL ===
 def get_db():
@@ -76,7 +76,7 @@ def init_db():
     db.close()
 
 # Initialize DB if missing
-if not os.path.exists(DB_PATH):
+# if not os.path.exists(DB_PATH):
     init_db()
 
 # === HELPERS ===
@@ -269,6 +269,8 @@ def delete_doctor(id):
     db.commit()
     flash("Doctor removed", "info")
     return redirect(url_for("manage_doctors"))
+
+
 
 # Run
 if __name__ == "__main__":
